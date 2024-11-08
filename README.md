@@ -1,4 +1,4 @@
-Gameplay
+GAMEPLAY
 The player controls a sphere at the bottom of the screen and must dodge randomly appearing obstacles falling from the top. The game increases in speed every 10 points, making it progressively harder to avoid obstacles as the score grows. The game ends if the sphere collides with an obstacle.
 
 Controls
