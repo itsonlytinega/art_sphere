@@ -1,140 +1,36 @@
-import math
-import cairo
+import pygame
+import random
 
+# Initialize Pygame
+pygame.init()
 
-# Set dimensions
-WIDTH, HEIGHT = 600, 600
-surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
-context = cairo.Context(surface)
+# Screen settings
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
 
+# Colors
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLACK = (0, 0, 0)
 
-def draw_sphere(context, center_x, center_y, radius):
-    context.arc(center_x, center_y, radius, 0, 2 * math.pi)
-    gradient = cairo.RadialGradient(center_x - radius * 0.5, center_y - radius * 0.5, radius * 0.2,
-                                    center_x, center_y, radius)
-    gradient.add_color_stop_rgb(0, 1, 1, 1)
-    gradient.add_color_stop_rgb(0.7, 0.5, 0.5, 0.5)
-    gradient.add_color_stop_rgb(1, 0.1, 0.1, 0.1)
-    context.set_source(gradient)
-    context.fill()
+# Sphere settings
+sphere_radius = 15
+sphere_x = width // 2
+sphere_y = height - 100
+sphere_speed_x = 10  # Horizontal movement speed
 
+# Game settings
+obstacle_speed = 5
+obstacles = []
+score = 0
+game_speed = 5
+increase_interval = 10  # Increase speed every 10 points
 
-# Clear the surface
-context.set_source_rgb(0.2, 0.2, 0.2)
-context.paint()
+# Perspective settings
+grid_color = GREEN
+line_spacing = 40
 
-# Draw the sphere
-draw_sphere(context, WIDTH // 2, HEIGHT // 2, 200)
-
-
-# BOAT
-
-def draw_semicircle(context, center_x, center_y, radius):
-    # Draw the semicircle
-    context.set_source_rgb(0, 0, 0)  # Red color
-    context.arc(center_x, center_y, radius, 0, math.pi)  # Semicircle from 0 to π
-    context.line_to(center_x * 2, center_y)  # Close the path to the right end
-    context.fill()  # Fill the semicircle
-
-
-# Draw the semicircle
-draw_semicircle(context, 365, 296, 25)
-
-
-def draw_vertical_line(ctx, start_x, start_y, end_x, end_y, color=(0, 0, 0), line_width=4):
-    ctx.set_source_rgb(*color)  # Set the color for the line
-    ctx.set_line_width(line_width)  # Set the line width
-    ctx.move_to(start_x, start_y)  # Move to the starting point
-    ctx.line_to(end_x, end_y)  # Draw line to the ending point
-    ctx.stroke()  # Render the line
-
-
-# Draw the vertical line
-draw_vertical_line(context, 370, 296, 370, 260)
-
-#flag
-def draw_flag(ctx):
-    ctx.move_to(370, 260)
-    ctx.line_to(356, 273)
-    ctx.line_to(370, 293)
-    ctx.close_path()
-    ctx.set_source_rgb(0, 0, 0)
-    ctx.fill()
-
-    ctx.set_source_rgb(0, 0, 0)
-    ctx.set_line_width(3)
-    ctx.stroke()
-
-
-# Call the draw_branch function
-draw_flag(context)
-ctx.set_source_rgb(0, 0, 0)  
-    ctx.set_line_width(3)
-    ctx.stroke() 
-
-# Call the draw_branch function
-draw_flag(context)
-
-# **************************** WAVES ****************************
-
-def draw_wave(context, start_x, start_y, amplitude, frequency, length):
-    # Move to the starting point
-    context.move_to(start_x, start_y)
-    
-    # Draw the wave with shading
-    for x in range(start_x, start_x + length):
-        # Calculate the y value using a sine function
-        y = start_y + amplitude * math.sin(frequency * (x - start_x) * (2 * math.pi / length))
-        
-        # Create a radial gradient to simulate depth
-        gradient = cairo.RadialGradient(x, y, 10, x, y, 50)
-        gradient.add_color_stop_rgb(0, 0.8, 0.8, 0.8)  # Light gray
-        gradient.add_color_stop_rgb(1, 0.3, 0.3, 0.3)  # Dark gray
-        
-        context.set_source(gradient)
-        
-        # Draw a small circle to represent the wave point
-        context.arc(x, y, 10, 0, 2 * math.pi)
-        context.fill()
-    
-    # Set line color for the outline of the waves
-    
-    context.set_source_rgb(0, 0, 0)  # Black outline
-    context.set_line_width(1)
-    
-    # Stroke the wave outline
-    context.move_to(start_x, start_y)
-    for x in range(start_x, start_x + length):
-        y = start_y + amplitude * math.sin(frequency * (x - start_x) * (2 * math.pi / length))
-        context.line_to(x, y)
-    context.stroke()
-
-
-# Example usage: draw a wave
-
-draw_wave(context, 230, 325, 5, 10, 220) 
-draw_wave(context, 230, 335, 5, 10, 220) 
-#draw_wave(context, 230, 340, 5, 10, 160) 
-draw_wave(context, 230, 345, 5, 10, 220) 
-#draw_wave(context, 230, 350, 4, 10, 180) 
-
-draw_wave(context, 230, 355, 4, 10, 230) 
-#draw_wave(context, 230, 360, 4, 10, 130) 
-draw_wave(context, 230, 365, 3, 10, 130) 
-#raw_wave(context, 230, 370, 3, 10, 130) 
-draw_wave(context, 230, 375, 2, 10, 130) 
-#draw_wave(context, 230, 380, 2, 10, 130) 
-draw_wave(context, 230, 385, 2, 10, 130) 
-
-#**************************************************OVALS*************************************************
-
-
-def draw_oval(context, center_x, center_y, radius_x, radius_y):
-    # Save the current state
-    context.save()
-    
-    # Move to the center of the oval
-    context.translate(center_x, center_y)
-    
-    # Scale the context to create an oval
-    context.scale(radius_x, radius_y)
+# Font
+font = pygame.font.SysFont(None, 36)
