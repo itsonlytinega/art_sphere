@@ -68,3 +68,73 @@ def draw_flag(ctx):
 
 # Call the draw_branch function
 draw_flag(context)
+ctx.set_source_rgb(0, 0, 0)  
+    ctx.set_line_width(3)
+    ctx.stroke() 
+
+# Call the draw_branch function
+draw_flag(context)
+
+# **************************** WAVES ****************************
+
+def draw_wave(context, start_x, start_y, amplitude, frequency, length):
+    # Move to the starting point
+    context.move_to(start_x, start_y)
+    
+    # Draw the wave with shading
+    for x in range(start_x, start_x + length):
+        # Calculate the y value using a sine function
+        y = start_y + amplitude * math.sin(frequency * (x - start_x) * (2 * math.pi / length))
+        
+        # Create a radial gradient to simulate depth
+        gradient = cairo.RadialGradient(x, y, 10, x, y, 50)
+        gradient.add_color_stop_rgb(0, 0.8, 0.8, 0.8)  # Light gray
+        gradient.add_color_stop_rgb(1, 0.3, 0.3, 0.3)  # Dark gray
+        
+        context.set_source(gradient)
+        
+        # Draw a small circle to represent the wave point
+        context.arc(x, y, 10, 0, 2 * math.pi)
+        context.fill()
+    
+    # Set line color for the outline of the waves
+    
+    context.set_source_rgb(0, 0, 0)  # Black outline
+    context.set_line_width(1)
+    
+    # Stroke the wave outline
+    context.move_to(start_x, start_y)
+    for x in range(start_x, start_x + length):
+        y = start_y + amplitude * math.sin(frequency * (x - start_x) * (2 * math.pi / length))
+        context.line_to(x, y)
+    context.stroke()
+
+
+# Example usage: draw a wave
+
+draw_wave(context, 230, 325, 5, 10, 220) 
+draw_wave(context, 230, 335, 5, 10, 220) 
+#draw_wave(context, 230, 340, 5, 10, 160) 
+draw_wave(context, 230, 345, 5, 10, 220) 
+#draw_wave(context, 230, 350, 4, 10, 180) 
+
+draw_wave(context, 230, 355, 4, 10, 230) 
+#draw_wave(context, 230, 360, 4, 10, 130) 
+draw_wave(context, 230, 365, 3, 10, 130) 
+#raw_wave(context, 230, 370, 3, 10, 130) 
+draw_wave(context, 230, 375, 2, 10, 130) 
+#draw_wave(context, 230, 380, 2, 10, 130) 
+draw_wave(context, 230, 385, 2, 10, 130) 
+
+#**************************************************OVALS*************************************************
+
+
+def draw_oval(context, center_x, center_y, radius_x, radius_y):
+    # Save the current state
+    context.save()
+    
+    # Move to the center of the oval
+    context.translate(center_x, center_y)
+    
+    # Scale the context to create an oval
+    context.scale(radius_x, radius_y)
