@@ -68,3 +68,41 @@ def check_collision():
 def reset_game():
     global sphere_x, obstacles, score, game_speed, game_over
     sphere_x = width // 2
+     obstacles.clear()
+    score = 0
+    game_speed = 5
+    game_over = False
+
+# Game loop
+running = True
+game_over = False
+paused = False
+
+while running:
+    screen.fill(BLACK)
+
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not game_over:  # Toggle pause
+                paused = not paused
+            elif event.key == pygame.K_ESCAPE and game_over:  # Restart on game over
+                reset_game()
+
+    # If game is paused, skip the game logic
+    if not paused and not game_over:
+        draw_grid()
+        display_score()
+
+        # Move the sphere left or right
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and sphere_x - sphere_radius > 0:
+            sphere_x -= sphere_speed_x
+        if keys[pygame.K_RIGHT] and sphere_x + sphere_radius < width:
+            sphere_x += sphere_speed_x
+
+        # Add new obstacles
+        if random.randint(1, 30) == 1:
+            create_obstacle()
