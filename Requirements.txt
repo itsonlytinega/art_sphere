@@ -1,0 +1,7 @@
+Requirements
+Python 3
+Pygame: You can install it with pip install pygame
+Future Enhancements
+Additional Power-ups: Add power-ups for temporary invincibility, speed boost, etc.
+Different Obstacles: Introduce varying obstacle shapes and sizes for more gameplay variety.
+Levels: Implement levels with unique challenges or themes.
