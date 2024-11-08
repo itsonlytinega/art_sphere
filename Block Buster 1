@@ -106,3 +106,42 @@ while running:
         # Add new obstacles
         if random.randint(1, 30) == 1:
             create_obstacle()
+
+        # Move obstacles down
+        for obstacle in obstacles[:]:
+            obstacle['y'] += game_speed
+            pygame.draw.rect(screen, RED, (obstacle['x'], obstacle['y'], obstacle['width'], obstacle['height']))
+
+            # Remove obstacles that have gone off screen and increase score
+            if obstacle['y'] > height:
+                obstacles.remove(obstacle)
+                score += 1
+                if score % increase_interval == 0:
+                    game_speed += 1
+
+        # Check for collision
+        if check_collision():
+            game_over = True
+
+        # Draw the sphere as a 3D-look circle
+        pygame.draw.circle(screen, WHITE, (sphere_x, sphere_y), sphere_radius)
+
+    elif game_over:
+        # Display the "Game Over" screen
+        screen.fill(BLACK)
+        game_over_text = font.render("GAME OVER", True, RED)
+        score_text = font.render(f"Score: {score}", True, WHITE)
+        restart_text = font.render("Press ESC to Restart", True, WHITE)
+        screen.blit(game_over_text, (width // 2 - game_over_text.get_width() // 2, height // 2 - 50))
+        screen.blit(score_text, (width // 2 - score_text.get_width() // 2, height // 2))
+        screen.blit(restart_text, (width // 2 - restart_text.get_width() // 2, height // 2 + 50))
+
+    elif paused:
+        # Display the "Paused" message
+        pause_text = font.render("Paused - Press SPACE to Resume", True, WHITE)
+        screen.blit(pause_text, (width // 2 - pause_text.get_width() // 2, height // 2))
+
+    pygame.display.flip()
+    clock.tick(30)
+
+pygame.quit()
