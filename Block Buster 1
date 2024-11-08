@@ -31,3 +31,40 @@ increase_interval = 10  # Increase speed every 10 points
 # Perspective settings
 grid_color = GREEN
 line_spacing = 40
+
+# Font
+font = pygame.font.SysFont(None, 36)
+
+# Function to draw the grid with perspective effect
+def draw_grid():
+    for i in range(0, width, line_spacing):
+        pygame.draw.line(screen, grid_color, (i, 0), (i, height), 1)
+    for j in range(0, height, line_spacing):
+        pygame.draw.line(screen, grid_color, (0, j), (width, j), 1)
+
+# Function to create a new obstacle
+def create_obstacle():
+    x = random.randint(0, width - line_spacing)
+    obstacle_width = line_spacing
+    obstacle_height = line_spacing * 2
+    obstacles.append({'x': x, 'y': 0, 'width': obstacle_width, 'height': obstacle_height})
+
+# Function to display the score
+def display_score():
+    score_text = font.render(f'Score: {score}', True, WHITE)
+    screen.blit(score_text, (10, 10))
+
+# Function to check for collision
+def check_collision():
+    for obstacle in obstacles:
+        if (sphere_x - sphere_radius < obstacle['x'] + obstacle['width'] and
+            sphere_x + sphere_radius > obstacle['x'] and
+            sphere_y - sphere_radius < obstacle['y'] + obstacle['height'] and
+            sphere_y + sphere_radius > obstacle['y']):
+            return True
+    return False
+
+# Reset game function
+def reset_game():
+    global sphere_x, obstacles, score, game_speed, game_over
+    sphere_x = width // 2
