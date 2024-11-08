@@ -1,0 +1,70 @@
+import math
+import cairo
+
+
+# Set dimensions
+WIDTH, HEIGHT = 600, 600
+surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
+context = cairo.Context(surface)
+
+
+def draw_sphere(context, center_x, center_y, radius):
+    context.arc(center_x, center_y, radius, 0, 2 * math.pi)
+    gradient = cairo.RadialGradient(center_x - radius * 0.5, center_y - radius * 0.5, radius * 0.2,
+                                    center_x, center_y, radius)
+    gradient.add_color_stop_rgb(0, 1, 1, 1)
+    gradient.add_color_stop_rgb(0.7, 0.5, 0.5, 0.5)
+    gradient.add_color_stop_rgb(1, 0.1, 0.1, 0.1)
+    context.set_source(gradient)
+    context.fill()
+
+
+# Clear the surface
+context.set_source_rgb(0.2, 0.2, 0.2)
+context.paint()
+
+# Draw the sphere
+draw_sphere(context, WIDTH // 2, HEIGHT // 2, 200)
+
+
+# BOAT
+
+def draw_semicircle(context, center_x, center_y, radius):
+    # Draw the semicircle
+    context.set_source_rgb(0, 0, 0)  # Red color
+    context.arc(center_x, center_y, radius, 0, math.pi)  # Semicircle from 0 to π
+    context.line_to(center_x * 2, center_y)  # Close the path to the right end
+    context.fill()  # Fill the semicircle
+
+
+# Draw the semicircle
+draw_semicircle(context, 365, 296, 25)
+
+
+def draw_vertical_line(ctx, start_x, start_y, end_x, end_y, color=(0, 0, 0), line_width=4):
+    ctx.set_source_rgb(*color)  # Set the color for the line
+    ctx.set_line_width(line_width)  # Set the line width
+    ctx.move_to(start_x, start_y)  # Move to the starting point
+    ctx.line_to(end_x, end_y)  # Draw line to the ending point
+    ctx.stroke()  # Render the line
+
+
+# Draw the vertical line
+draw_vertical_line(context, 370, 296, 370, 260)
+
+#flag
+def draw_flag(ctx):
+    ctx.move_to(370, 260)
+    ctx.line_to(356, 273)
+    ctx.line_to(370, 293)
+    ctx.close_path()
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.fill()
+
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.set_line_width(3)
+    ctx.stroke()
+
+
+# Call the draw_branch function
+draw_flag(context)
